@@ -1,7 +1,6 @@
 package com.tree.test.service.impl;
 
-import com.tree.test.model.dao.Account;
-import com.tree.test.model.dao.Statement;
+import com.tree.test.model.Account;
 import com.tree.test.model.dto.StatementResponseDto;
 import com.tree.test.repository.AccountRepository;
 import com.tree.test.repository.StatementRepository;
@@ -36,14 +35,14 @@ public class StatementServiceImpl implements StatementService {
                 Map<String, Object> response = Map.of("error", errorMessage);
                 return ResponseEntity.badRequest().body(response); // Account not found
             }
-            LocalDate staticDate = LocalDate.of(2012,01,01);
+//            LocalDate staticDate = LocalDate.of(2012,01,01);
             List<StatementResponseDto> statements = statementRepository.findByAccountId(accountId).stream().map(s ->{
                 Date newDate = convertToDate(s.getDateField());
                 StatementResponseDto statementResponseDto = new StatementResponseDto(s.getId(), newDate, s.getAmount());
                 return statementResponseDto;
             })
-//                    .filter(s -> s.getDate().after(java.sql.Date.valueOf(LocalDate.now().minusMonths(3))))
-                    .filter(s -> s.getDate().after(java.sql.Date.valueOf(staticDate.minusMonths(3))))
+                    .filter(s -> s.getDate().after(java.sql.Date.valueOf(LocalDate.now().minusMonths(3))))
+//                    .filter(s -> s.getDate().after(java.sql.Date.valueOf(staticDate.minusMonths(3))))
                     .collect(Collectors.toList());
 
             return ResponseEntity.ok().body(statements);

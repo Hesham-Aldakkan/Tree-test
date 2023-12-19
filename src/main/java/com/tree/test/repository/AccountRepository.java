@@ -1,6 +1,6 @@
 package com.tree.test.repository;
 
-import com.tree.test.model.dao.Account;
+import com.tree.test.model.Account;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,4 +1,4 @@
-package com.tree.test.model.dao;
+package com.tree.test.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;

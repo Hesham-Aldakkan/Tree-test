@@ -41,7 +41,7 @@ public class SecurityConfig {
         http.formLogin(Customizer.withDefaults());
         http.logout(logout -> logout.logoutUrl("/logout"));
 
-//        //disable csrf
+        //disable csrf
         http.csrf(csrf -> csrf.disable());
         return http.build();
     }

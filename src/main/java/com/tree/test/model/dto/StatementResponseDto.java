@@ -1,6 +1,5 @@
 package com.tree.test.model.dto;
 
-import com.tree.test.model.dao.Statement;
 import lombok.Getter;
 import lombok.Setter;
 
