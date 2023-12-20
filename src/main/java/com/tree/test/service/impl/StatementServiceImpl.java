@@ -13,7 +13,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class StatementServiceImpl implements StatementService {
@@ -26,7 +25,7 @@ public class StatementServiceImpl implements StatementService {
     }
 
     @Override
-    public ResponseEntity getStatementsByAccountId(Long accountId) {
+    public ResponseEntity<Object> getStatementsByAccountId(Long accountId) {
         try {
             // Check if the account exists
             Optional<Account> accountOptional = accountRepository.findById(accountId); //this could be optimized
@@ -35,26 +34,22 @@ public class StatementServiceImpl implements StatementService {
                 Map<String, Object> response = Map.of("error", errorMessage);
                 return ResponseEntity.badRequest().body(response); // Account not found
             }
-//            LocalDate staticDate = LocalDate.of(2012,01,01);
             List<StatementResponseDto> statements = statementRepository.findByAccountId(accountId).stream().map(s ->{
                 Date newDate = convertToDate(s.getDateField());
-                StatementResponseDto statementResponseDto = new StatementResponseDto(s.getId(), newDate, s.getAmount());
-                return statementResponseDto;
+                return new StatementResponseDto(s.getId(), newDate, s.getAmount());
             })
                     .filter(s -> s.getDate().after(java.sql.Date.valueOf(LocalDate.now().minusMonths(3))))
-//                    .filter(s -> s.getDate().after(java.sql.Date.valueOf(staticDate.minusMonths(3))))
-                    .collect(Collectors.toList());
+                    .toList();
 
             return ResponseEntity.ok().body(statements);
         } catch (Exception e) {
-            String errorMessage = e.getMessage();
-            Map<String, Object> response = Map.of("error", errorMessage);
+            Map<String, Object> response = Map.of("error", e.getMessage());
             return ResponseEntity.internalServerError().body(response);
         }
     }
 
     @Override
-    public ResponseEntity searchStatements(Long accountId, String fromDate, String toDate, String fromAmount, String toAmount) {
+    public ResponseEntity<Object> searchStatements(Long accountId, String fromDate, String toDate, String fromAmount, String toAmount) {
         try {
             // Check if the account exists
             Optional<Account> accountOptional = accountRepository.findById(accountId); //this could be optimized
@@ -68,8 +63,7 @@ public class StatementServiceImpl implements StatementService {
             List<StatementResponseDto> statements = statementRepository.findByAccountId(accountId).stream().map(
                     s -> {
                         Date newDate = convertToDate(s.getDateField());
-                        StatementResponseDto statementResponseDto = new StatementResponseDto(s.getId(), newDate, s.getAmount());
-                        return statementResponseDto;
+                        return new StatementResponseDto(s.getId(), newDate, s.getAmount());
                     })
                     .filter(
                             s -> {
@@ -84,7 +78,7 @@ public class StatementServiceImpl implements StatementService {
                                 }
                             }
                     )
-                    .collect(Collectors.toList());
+                    .toList();
 
             return ResponseEntity.ok().body(statements);
         } catch (Exception e) {
@@ -102,7 +96,4 @@ public class StatementServiceImpl implements StatementService {
             throw new RuntimeException(e);
         }
     }
-
-
-
 }

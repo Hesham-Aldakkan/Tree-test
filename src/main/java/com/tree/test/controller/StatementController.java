@@ -20,7 +20,7 @@ public class StatementController {
     }
 
     @GetMapping("/{accountId}")
-    public ResponseEntity getStatements(
+    public ResponseEntity<Object> getStatements(
             @PathVariable Long accountId,
             @RequestParam(required = false) String fromDate,
             @RequestParam(required = false) String toDate,
