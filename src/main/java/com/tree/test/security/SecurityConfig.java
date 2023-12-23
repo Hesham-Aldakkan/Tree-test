@@ -37,14 +37,12 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(
                         config -> config
-                                .requestMatchers(HttpMethod.GET, "/api/v1/statements/{accountId}").hasAnyRole(USER_ROLE, ADMIN_ROLE)
-                                .requestMatchers(HttpMethod.GET, "/api/v1/statements/{accountId}**").hasRole(ADMIN_ROLE));
+                                .requestMatchers(HttpMethod.GET, "/api/v1/statements/{accountId}").hasAnyRole(USER_ROLE, ADMIN_ROLE));
         http.httpBasic(Customizer.withDefaults());
 
         http.sessionManagement(session -> session.maximumSessions(1).maxSessionsPreventsLogin(true).expiredUrl("/login"));
         http.formLogin(Customizer.withDefaults());
         http.logout(logout -> logout.logoutUrl("/logout"));
-
         return http.build();
     }
 

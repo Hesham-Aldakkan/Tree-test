@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8081
   error:
     include-stacktrace: never
   servlet:
@@ -7,7 +7,7 @@ server:
       timeout: 5m
 spring:
   datasource:
-    url: jdbc:ucanaccess://DB-path
+    url: jdbc:ucanaccess://D://accountsdb.accdb
     driver-class-name: net.ucanaccess.jdbc.UcanaccessDriver
   jpa:
     database-platform: org.hibernate.dialect.HSQLDialect
